@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head('编辑软件', null, null)" th:with="loadEditor=true">
+    <!-- Quill.js 富文本编辑器 -->
+</head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header th:replace="fragments/nav :: nav"></header>
+
+    <main class="flex-grow max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 md:p-12">
+            <header class="border-b border-gray-100 pb-6 mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    编辑软件资源
+                </h1>
+            </header>
+
+            <form id="editItemForm" class="space-y-6">
+                <input type="hidden" name="id" th:value="${model.id}">
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">标题</label>
+                    <input type="text" name="title" th:value="${model.title}" required
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">采集地址 (retCode)</label>
+                    <input type="text" name="retCode" th:value="${model.retCode}" required
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">下载地址</label>
+                    <div class="editor-wrapper">
+                        <div id="quill_path" class="min-h-[150px]"></div>
+                    </div>
+                    <textarea id="path_hidden" name="path" class="hidden" th:text="${model.path}"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">软件简介</label>
+                    <div class="editor-wrapper">
+                        <div id="quill_brief" class="min-h-[150px]"></div>
+                    </div>
+                    <textarea id="brief_hidden" name="brief" class="hidden" th:text="${model.brief}"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">软件详情</label>
+                    <div class="editor-wrapper">
+                        <div id="quill_content" class="min-h-[250px]"></div>
+                    </div>
+                    <textarea id="content_hidden" name="content" class="hidden" th:text="${model.content}"></textarea>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" name="useMinio" value="1" th:checked="${model.useMinio == '1'}" id="useMinio"
+                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="useMinio" class="text-sm font-medium text-gray-700">使用 Minio 存储富文本内容</label>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">操作系统</label>
+                        <input type="text" name="os" th:value="${model.os}" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">软件颜色 (Tailwind 色值或 Hex)</label>
+                        <input type="text" name="color" th:value="${model.color}" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">置顶指数 (hotIndex)</label>
+                        <input type="number" name="hotIndex" th:value="${model.hotIndex}" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">标签 (英文 tagsCode)</label>
+                        <input type="text" name="tagsCode" th:value="${model.tagsCode}" required
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">标签 (中文 tags)</label>
+                    <input type="text" name="tags" th:value="${model.tags}" required
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                </div>
+
+                <div class="pt-6 border-t border-gray-100 flex justify-end gap-4">
+                    <a th:href="@{'/soft/' + ${model.retCode} + '.html'}"
+                       class="px-6 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+                        取消
+                    </a>
+                    <button type="button" id="submitBtn"
+                            class="px-6 py-3 rounded-xl bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm">
+                        保存修改
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <!-- Quill.js Scripts -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            // Quill 编辑器工具栏配置
+            const toolbarOptions = [
+                [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'align': [] }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                ['blockquote', 'code', 'code-block'],
+                ['link', 'image', 'video'],
+                ['clean']
+            ];
+
+            // 初始化各 Quill 编辑器
+            const quillPath = new Quill('#quill_path', { theme: 'snow', modules: { toolbar: toolbarOptions } });
+            const quillBrief = new Quill('#quill_brief', { theme: 'snow', modules: { toolbar: toolbarOptions } });
+            const quillContent = new Quill('#quill_content', { theme: 'snow', modules: { toolbar: toolbarOptions } });
+
+            // 移动 toolbar 到 editor-wrapper 内部以实现视觉融合
+            document.querySelectorAll('.editor-wrapper').forEach(wrapper => {
+                const toolbar = wrapper.previousElementSibling;
+                if (toolbar && toolbar.classList.contains('ql-toolbar')) {
+                    wrapper.insertBefore(toolbar, wrapper.firstChild);
+                }
+            });
+
+            // 载入已有内容
+            const pathText = document.getElementById('path_hidden').value;
+            if (pathText) quillPath.clipboard.dangerouslyPasteHTML(pathText);
+
+            const briefText = document.getElementById('brief_hidden').value;
+            if (briefText) quillBrief.clipboard.dangerouslyPasteHTML(briefText);
+
+            const contentText = document.getElementById('content_hidden').value;
+            if (contentText) quillContent.clipboard.dangerouslyPasteHTML(contentText);
+
+            // 绑定切换源码功能
+            function enableSourceMode(quillInstance, containerId, hiddenInputId, minHeightClass) {
+                const container = document.getElementById(containerId);
+                const hiddenInput = document.getElementById(hiddenInputId);
+                const wrapper = container.closest('.editor-wrapper');
+                
+                const btnWrapper = document.createElement('div');
+                btnWrapper.className = 'mt-2 flex justify-end';
+                
+                const toggleBtn = document.createElement('button');
+                toggleBtn.type = 'button';
+                toggleBtn.className = 'px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors border border-gray-200 font-semibold';
+                toggleBtn.innerText = '切换 HTML 源码';
+                btnWrapper.appendChild(toggleBtn);
+                
+                wrapper.parentNode.insertBefore(btnWrapper, wrapper.nextSibling);
+                
+                let isSourceMode = false;
+                
+                toggleBtn.addEventListener('click', function() {
+                    const toolbar = wrapper.querySelector('.ql-toolbar');
+                    if (isSourceMode) {
+                        quillInstance.clipboard.dangerouslyPasteHTML(hiddenInput.value);
+                        container.classList.remove('hidden');
+                        if (toolbar) {
+                            toolbar.classList.remove('hidden');
+                        }
+                        hiddenInput.classList.add('hidden');
+                        hiddenInput.className = 'hidden';
+                        toggleBtn.innerText = '切换 HTML 源码';
+                        toggleBtn.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200');
+                        toggleBtn.classList.add('bg-gray-100', 'text-gray-700', 'border-gray-200');
+                    } else {
+                        hiddenInput.value = quillInstance.root.innerHTML;
+                        container.classList.add('hidden');
+                        if (toolbar) {
+                            toolbar.classList.add('hidden');
+                        }
+                        hiddenInput.classList.remove('hidden');
+                        hiddenInput.className = 'source-textarea ' + minHeightClass;
+                        wrapper.appendChild(hiddenInput);
+                        toggleBtn.innerText = '切回富文本编辑';
+                        toggleBtn.classList.remove('bg-gray-100', 'text-gray-700', 'border-gray-200');
+                        toggleBtn.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
+                    }
+                    isSourceMode = !isSourceMode;
+                });
+            }
+
+            enableSourceMode(quillPath, 'quill_path', 'path_hidden', 'min-h-[150px]');
+            enableSourceMode(quillBrief, 'quill_brief', 'brief_hidden', 'min-h-[150px]');
+            enableSourceMode(quillContent, 'quill_content', 'content_hidden', 'min-h-[250px]');
+
+            // 提交修改逻辑
+            document.getElementById('submitBtn').addEventListener('click', function () {
+                // 将富文本内容写回隐藏域（如果当前不在源码编辑状态）
+                if (document.getElementById('path_hidden').classList.contains('hidden')) {
+                    document.getElementById('path_hidden').value = quillPath.root.innerHTML;
+                }
+                if (document.getElementById('brief_hidden').classList.contains('hidden')) {
+                    document.getElementById('brief_hidden').value = quillBrief.root.innerHTML;
+                }
+                if (document.getElementById('content_hidden').classList.contains('hidden')) {
+                    document.getElementById('content_hidden').value = quillContent.root.innerHTML;
+                }
+
+                const form = document.getElementById('editItemForm');
+                const formData = new FormData(form);
+
+                fetch('/soft/addItem', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.result) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '成功',
+                            text: '保存软件资源成功',
+                            confirmButtonText: '确定'
+                        }).then(() => {
+                            window.location.href = '/soft/' + [[${model.retCode}]] + '.html';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '错误',
+                            text: data.message || '操作失败，请重试'
+                        });
+                    }
+                })
+                .catch(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '网络错误',
+                        text: '操作失败，请检查网络后重试'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

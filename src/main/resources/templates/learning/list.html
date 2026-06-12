@@ -65,11 +65,11 @@
                 <!-- Pagination -->
                 <div class="mt-12 flex justify-center space-x-1" th:if="${totalPages > 1}">
                     <a th:if="${currentPage > 1}" 
-                       th:href="@{${actionUrl} + '/page/' + ${currentPage - 1}(keyword=${keyword}, orderBy=${orderBy})}" 
+                       th:href="@{'/learning/page/' + ${currentPage - 1}(keyword=${keyword}, orderBy=${orderBy})}"
                        class="px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">&larr; 上一页</a>
                     <span class="px-4 py-2 text-sm text-gray-500" th:text="${currentPage} + ' / ' + ${totalPages}">1 / 1</span>
                     <a th:if="${currentPage < totalPages}" 
-                       th:href="@{${actionUrl} + '/page/' + ${currentPage + 1}(keyword=${keyword}, orderBy=${orderBy})}" 
+                       th:href="@{'/learning/page/' + ${currentPage + 1}(keyword=${keyword}, orderBy=${orderBy})}"
                        class="px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">下一页 &rarr;</a>
                 </div>
             </div>

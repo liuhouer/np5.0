@@ -100,6 +100,10 @@ public class UserController {
                 // 使用 Spring Security Context 保存登录状态，取代传统 Session 注入
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                // 判定是否是管理员用户 (ID 为 507723, 508200)
+                if (user.getId() != null && (user.getId() == 507723 || user.getId() == 508200)) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                }
                 
                 // 将 Principal 设置为当前 User 实体，以便 SessionRegistry 识别活跃 Principal
                 org.springframework.security.core.userdetails.User springUser = 
@@ -275,6 +279,10 @@ public class UserController {
             // 使用 Spring Security Context 保存登录状态，取代传统 Session 注入
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            // 判定是否是管理员用户 (ID 为 507723, 508200)
+            if (user.getId() != null && (user.getId() == 507723 || user.getId() == 508200)) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
             
             // 将 Principal 设置为当前 User 实体，以便 SessionRegistry 识别活跃 Principal
             org.springframework.security.core.userdetails.User springUser = 

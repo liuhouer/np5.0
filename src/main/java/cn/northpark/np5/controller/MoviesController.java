@@ -1,25 +1,30 @@
 package cn.northpark.np5.controller;
 
 import cn.northpark.np5.model.Movies;
+import cn.northpark.np5.model.Result;
 import cn.northpark.np5.model.Tags;
+import cn.northpark.np5.model.User;
 import cn.northpark.np5.service.MoviesService;
 import cn.northpark.np5.service.TagsService;
+import cn.northpark.np5.utils.ResultGenerator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
 @RequestMapping("/movies")
+@Slf4j
 public class MoviesController {
 
     @Autowired
@@ -144,6 +149,18 @@ public class MoviesController {
         return "movies/detail";
     }
 
+    /**
+     * 跳转到电影编辑页面
+     */
+    @RequestMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable("id") Integer id) {
+        Movies item = moviesService.getById(id);
+        if (item != null) {
+            model.addAttribute("model", item);
+        }
+        return "movies/edit";
+    }
+
     private void handleTags(List<Movies> list) {
         for (Movies m : list) {
             // 解析图片地址
@@ -184,5 +201,99 @@ public class MoviesController {
         tagQuery.eq("tag_type", "1");
         List<Tags> tags = tagsService.list(tagQuery);
         model.addAttribute("moviesTags", tags);
+    }
+
+    /**
+     * 置顶的方法
+     */
+    @RequestMapping("/handup")
+    @ResponseBody
+    public Result<String> handup(HttpServletRequest request) {
+        String rs = "success";
+        try {
+            // 获取当前登录用户权限
+            if (!request.isUserInRole("ROLE_ADMIN")) {
+                return ResultGenerator.genErrorResult(403, "没有操作权限");
+            }
+
+            String id = request.getParameter("id");
+            String max_hot_sql_id = "select max(hot_index) as hot_index from bc_movies ";
+            List<Map<String, Object>> list = moviesService.listMaps(new QueryWrapper<Movies>().select("max(hot_index) as hot_index"));
+            Integer hot_index = 0;
+            if (!CollectionUtils.isEmpty(list) && Objects.nonNull(list.get(0).get("hot_index"))) {
+                hot_index = ((Number) list.get(0).get("hot_index")).intValue();
+                hot_index++;
+            }
+
+            if (hot_index > 0) {
+                Movies m = moviesService.getById(Integer.parseInt(id));
+                if (m != null) {
+                    m.setHotIndex(hot_index);
+                    moviesService.updateById(m);
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("movies action 置顶异常", e);
+            rs = "ex";
+        }
+        return ResultGenerator.genSuccessResult(rs);
+    }
+
+    /**
+     * 保存电影资源
+     */
+    @RequestMapping("/addItem")
+    @ResponseBody
+    public Result<String> addItem(Movies model, HttpServletRequest request) {
+        if (!request.isUserInRole("ROLE_ADMIN")) {
+            return ResultGenerator.genErrorResult(403, "没有操作权限");
+        }
+        try {
+            if (model.getId() != null && model.getId() != 0) {
+                // 更新
+                model.setAddTime(java.time.LocalDate.now().toString());
+                moviesService.updateById(model);
+            } else {
+                // 新增
+                model.setAddTime(java.time.LocalDate.now().toString());
+                if (StringUtils.isBlank(model.getRetCode()) && StringUtils.isNotBlank(model.getMovieName())) {
+                    // 自动生成 ret_code
+                    model.setRetCode(cn.northpark.np5.utils.encrypt.MD5Utils.encrypt(model.getMovieName(), cn.northpark.np5.utils.encrypt.MD5Utils.MD5_KEY));
+                }
+                moviesService.save(model);
+            }
+            return ResultGenerator.genSuccessResult("success");
+        } catch (Exception e) {
+            log.error("保存电影异常", e);
+            return ResultGenerator.genErrorResult(500, "操作失败");
+        }
+    }
+
+    /**
+     * 隐藏电影的方法
+     */
+    @RequestMapping("/hideup")
+    @ResponseBody
+    public Result<String> hideup(HttpServletRequest request) {
+        String rs = "success";
+        try {
+            // 获取当前登录用户权限
+            if (!request.isUserInRole("ROLE_ADMIN")) {
+                return ResultGenerator.genErrorResult(403, "没有操作权限");
+            }
+
+            String id = request.getParameter("id");
+            Movies m = moviesService.getById(Integer.parseInt(id));
+            if (m != null) {
+                m.setDisplayed("N");
+                moviesService.updateById(m);
+            }
+
+        } catch (Exception e) {
+            log.error("movies action 隐藏异常", e);
+            rs = "ex";
+        }
+        return ResultGenerator.genSuccessResult(rs);
     }
 }

@@ -27,9 +27,15 @@ public class SecurityConfig {
                     "/movies/tag/**",
                     "/movies/date/**",
                     "/soft",
-                    "/soft/**",
+                    "/soft/mac",
+                    "/soft/mac/page/**",
+                    "/soft/tag/**",
+                    "/soft/month/**",
+                    "/soft/*.html",
                     "/learning",
-                    "/learning/**",
+                    "/learning/page/**",
+                    "/learning/tag/**",
+                    "/learning/*.html",
                     "/about",
                     "/sponsor",
                     "/sponsor/list",
@@ -46,6 +52,18 @@ public class SecurityConfig {
                     "/js/**",
                     "/img/**"
                 ).permitAll()
+                // 管理操作需具有 ROLE_ADMIN
+                .antMatchers(
+                    "/soft/handup",
+                    "/soft/hideup",
+                    "/soft/edit/**",
+                    "/movies/handup",
+                    "/movies/hideup",
+                    "/movies/edit/**",
+                    "/learning/handup",
+                    "/learning/hideup",
+                    "/learning/edit/**"
+                ).hasRole("ADMIN")
                 // 需要认证的路由（如评论、下载等，后台管理可以进一步配置）
                 .anyRequest().authenticated()
             .and()

@@ -1,10 +1,14 @@
 package cn.northpark.np5.controller;
 
 import cn.northpark.np5.model.Knowledge;
+import cn.northpark.np5.model.Result;
 import cn.northpark.np5.model.Tags;
+import cn.northpark.np5.model.User;
 import cn.northpark.np5.service.KnowledgeService;
 import cn.northpark.np5.service.TagsService;
+import cn.northpark.np5.utils.ResultGenerator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +16,9 @@ import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/learning")
@@ -141,6 +145,18 @@ public class KnowledgeController {
         return "learning/detail";
     }
 
+    /**
+     * 跳转到学习课程编辑页面
+     */
+    @RequestMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable("id") Integer id) {
+        Knowledge item = knowledgeService.getById(id);
+        if (item != null) {
+            model.addAttribute("model", item);
+        }
+        return "learning/edit";
+    }
+
     private void handleTags(List<Knowledge> list) {
         for (Knowledge k : list) {
             if (StringUtils.isNotBlank(k.getTags()) && StringUtils.isNotBlank(k.getTagsCode())) {
@@ -174,5 +190,97 @@ public class KnowledgeController {
         tagQuery.eq("tag_type", "4");
         List<Tags> tags = tagsService.list(tagQuery);
         model.addAttribute("learnTags", tags);
+    }
+
+    /**
+     * 置顶的方法
+     */
+    @RequestMapping("/handup")
+    @ResponseBody
+    public Result<String> handup(HttpServletRequest request) {
+        String rs = "success";
+        try {
+            // 获取当前登录用户权限
+            if (!request.isUserInRole("ROLE_ADMIN")) {
+                return ResultGenerator.genErrorResult(403, "没有操作权限");
+            }
+
+            String id = request.getParameter("id");
+            String max_hot_sql_id = "select max(hot_index) as hot_index from bc_knowledge ";
+            List<Map<String, Object>> list = knowledgeService.querySqlMap(max_hot_sql_id);
+            Integer hot_index = 0;
+            if (!CollectionUtils.isEmpty(list) && Objects.nonNull(list.get(0).get("hot_index"))) {
+                hot_index = ((Number) list.get(0).get("hot_index")).intValue();
+                hot_index++;
+            }
+
+            if (hot_index > 0) {
+                Knowledge m = knowledgeService.getById(Integer.parseInt(id));
+                if (m != null) {
+                    m.setHotIndex(hot_index);
+                    knowledgeService.updateById(m);
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("learning action 置顶异常", e);
+            rs = "ex";
+        }
+        return ResultGenerator.genSuccessResult(rs);
+    }
+
+    /**
+     * 保存学习资源
+     */
+    @RequestMapping("/addItem")
+    @ResponseBody
+    public Result<String> addItem(Knowledge model, HttpServletRequest request) {
+        if (!request.isUserInRole("ROLE_ADMIN")) {
+            return ResultGenerator.genErrorResult(403, "没有操作权限");
+        }
+        try {
+            if (model.getId() != null && model.getId() != 0) {
+                // 更新
+                knowledgeService.updateById(model);
+            } else {
+                // 新增
+                model.setPostDate(java.time.LocalDate.now().toString());
+                if (StringUtils.isBlank(model.getRetCode()) && StringUtils.isNotBlank(model.getTitle())) {
+                    model.setRetCode(cn.northpark.np5.utils.encrypt.MD5Utils.encrypt(model.getTitle(), cn.northpark.np5.utils.encrypt.MD5Utils.MD5_KEY));
+                }
+                knowledgeService.save(model);
+            }
+            return ResultGenerator.genSuccessResult("success");
+        } catch (Exception e) {
+            log.error("保存学习异常", e);
+            return ResultGenerator.genErrorResult(500, "操作失败");
+        }
+    }
+
+    /**
+     * 隐藏学习的方法
+     */
+    @RequestMapping("/hideup")
+    @ResponseBody
+    public Result<String> hideup(HttpServletRequest request) {
+        String rs = "success";
+        try {
+            // 获取当前登录用户权限
+            if (!request.isUserInRole("ROLE_ADMIN")) {
+                return ResultGenerator.genErrorResult(403, "没有操作权限");
+            }
+
+            String id = request.getParameter("id");
+            Knowledge m = knowledgeService.getById(Integer.parseInt(id));
+            if (m != null) {
+                m.setDisplayed("N");
+                knowledgeService.updateById(m);
+            }
+
+        } catch (Exception e) {
+            log.error("learning action 隐藏异常", e);
+            rs = "ex";
+        }
+        return ResultGenerator.genSuccessResult(rs);
     }
 }

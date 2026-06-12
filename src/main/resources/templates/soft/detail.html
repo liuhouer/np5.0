@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/head :: head(${model.title}, null, ${softDescText})"></head>
 <body class="flex flex-col min-h-screen">
     <header th:replace="fragments/nav :: nav"></header>
@@ -13,6 +13,24 @@
                     <span class="text-xs text-gray-400" th:text="${model.postDate}">2026-03-14</span>
                 </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight" th:text="${model.title}">软件名称</h1>
+                
+                <!-- 管理员快速操作区 -->
+                <div sec:authorize="hasRole('ROLE_ADMIN')" 
+                     class="mt-4 flex flex-wrap gap-4 text-sm bg-gray-50 border border-gray-100 rounded-xl p-3 items-center">
+                    <span class="text-gray-500 font-medium">快捷管理:</span>
+                    <button th:onclick="'handup(' + ${model.id} + ')'" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-semibold transition-colors cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                        置顶
+                    </button>
+                    <button th:onclick="'hideup(' + ${model.id} + ')'" class="text-red-600 hover:text-red-800 flex items-center gap-1 font-semibold transition-colors cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
+                        大尺度隐藏
+                    </button>
+                    <a th:href="@{'/soft/edit/' + ${model.id}}" class="text-green-600 hover:text-green-800 flex items-center gap-1 font-semibold transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        快速编辑
+                    </a>
+                </div>
                 <div class="flex flex-wrap gap-2 mt-4">
                     <a th:each="tagMap : ${model.tagList}" 
                        th:href="@{'/soft/tag/' + ${tagMap.tag_code}}" 
@@ -56,5 +74,54 @@
     </main>
 
     <footer th:replace="fragments/footer :: footer"></footer>
+    
+    <!-- 管理员操作脚本 -->
+    <script sec:authorize="hasRole('ROLE_ADMIN')">
+        function handup(id) {
+            if (confirm("确定要置顶吗？")) {
+                var formData = new FormData();
+                formData.append("id", id);
+                fetch("/soft/handup", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.result) {
+                        alert("置顶成功");
+                        window.location.reload();
+                    } else {
+                        alert(data.message || "置顶失败");
+                    }
+                })
+                .catch(function(err) {
+                    alert("网络错误，操作失败");
+                });
+            }
+        }
+
+        function hideup(id) {
+            if (confirm("确定要隐藏吗？")) {
+                var formData = new FormData();
+                formData.append("id", id);
+                fetch("/soft/hideup", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.result) {
+                        alert("隐藏成功");
+                        window.location.href = "/soft/mac";
+                    } else {
+                        alert(data.message || "隐藏失败");
+                    }
+                })
+                .catch(function(err) {
+                    alert("网络错误，操作失败");
+                });
+            }
+        }
+    </script>
 </body>
 </html>
