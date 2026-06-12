@@ -119,6 +119,16 @@ public class UserController {
                 user.setLastLogin(LocalDate.now().toString());
                 userService.updateById(user);
 
+                // 发送站长消息通知通知登录
+                try {
+                    cn.northpark.np5.entity.NotifyRemind nr = new cn.northpark.np5.entity.NotifyRemind();
+                    nr.setMessage(user.toString() + "---" + java.time.LocalDateTime.now().toString() + "---登录了---");
+                    nr.setStatus("0");
+                    cn.northpark.np5.notify.NotifyEnum.WEBMASTER.getNotifyInstance().startSync(nr);
+                } catch (Exception ex) {
+                    log.error("login notice error", ex);
+                }
+
                 result.put("result", true);
                 result.put("message", "登录成功");
                 result.put("data", "/");
@@ -281,6 +291,16 @@ public class UserController {
             httpSession.setAttribute("user", user);
 
             redisTemplate.delete(verifiedKey);
+
+            // 发送异步站长通知消息通知注册
+            try {
+                cn.northpark.np5.entity.NotifyRemind nr = new cn.northpark.np5.entity.NotifyRemind();
+                nr.setMessage(user.toString() + "---" + java.time.LocalDateTime.now().toString() + "---注册了---");
+                nr.setStatus("0");
+                cn.northpark.np5.notify.NotifyEnum.WEBMASTER.getNotifyInstance().startSync(nr);
+            } catch (Exception ex) {
+                log.error("signup notice error", ex);
+            }
 
             result.put("result", true);
             result.put("message", "注册成功");
