@@ -23,13 +23,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47bc92ec-7014-4a59-b188-409b8cf0f2ac" name="默认的" comment="" />
+    <list id="2f08a385-191e-4a4b-8ecd-4cd23367ee18" name="ignored" comment="">
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/Np5Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/Np5Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/HomeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/KnowledgeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/KnowledgeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/MoviesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/MoviesController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/SoftController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/SoftController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/EnvCfg.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/EnvCfg.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Knowledge.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Knowledge.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Movies.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Movies.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Soft.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Soft.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Tags.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/Tags.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/EmailUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/EmailUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/EnvCfgUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/EnvCfgUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/MinioUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/MinioUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/encrypt/Base64Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/encrypt/Base64Utils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/encrypt/NorthParkCryptUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/cn/northpark/np5/utils/encrypt/NorthParkCryptUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragments/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragments/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragments/nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragments/nav.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/learning/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/learning/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/learning/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/learning/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/soft/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/soft/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../np2" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="2" />
@@ -37,12 +65,13 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="$PROJECT_DIR$/../../java/maven/apache-maven-3.8.2" />
+        <option name="mavenHome" value="D:\APP\java\maven\apache-maven-3.8.2" />
         <option name="userSettingsFile" value="D:\APP\java\maven\apache-maven-3.8.2\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
   <component name="ProjectId" id="3Evs896tSyRrv74rC8galRYaOak" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -55,7 +84,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../np2/pom.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="模块" />
@@ -65,6 +94,11 @@
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\APP\npSpace\np5" />
+    </key>
   </component>
   <component name="RunManager" selected="Spring Boot.Np5Application">
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -154,12 +188,44 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="47bc92ec-7014-4a59-b188-409b8cf0f2ac" name="默认的" comment="" />
+      <changelist id="2f08a385-191e-4a4b-8ecd-4cd23367ee18" name="ignored" comment="" />
       <created>1781070217412</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1781070217412</updated>
-      <workItem from="1781070218698" duration="13023000" />
+      <workItem from="1781070218698" duration="13624000" />
+      <workItem from="1781159115477" duration="7946000" />
+      <workItem from="1781245061174" duration="827000" />
     </task>
+    <task id="LOCAL-00001" summary="git ign">
+      <created>1781162776514</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1781162776514</updated>
+    </task>
+    <task id="LOCAL-00002" summary="git ign">
+      <created>1781166954561</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1781166954561</updated>
+    </task>
+    <task id="LOCAL-00003" summary="软件/课程/关于/赞助">
+      <created>1781167099872</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1781167099872</updated>
+    </task>
+    <task id="LOCAL-00004" summary="软件/课程列表 空图展示效果优化">
+      <created>1781245843092</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1781245843092</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,8 +241,19 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="git ign" />
+    <MESSAGE value="软件/课程/关于/赞助" />
+    <MESSAGE value="软件/课程列表 空图展示效果优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="软件/课程列表 空图展示效果优化" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="520" y="35" key="CommitChangelistDialog2" timestamp="1781245839045">
+      <screen x="0" y="0" width="1707" height="930" />
+    </state>
+    <state x="520" y="35" key="CommitChangelistDialog2/0.0.1707.930@0.0.1707.930" timestamp="1781245839045" />
     <state width="575" height="466" key="DebuggerActiveHint" timestamp="1781081697677">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
@@ -185,70 +262,82 @@
       <screen x="0" y="0" width="1707" height="930" />
     </state>
     <state x="635" y="220" key="FileChooserDialogImpl/0.0.1707.930@0.0.1707.930" timestamp="1781074817980" />
-    <state width="1666" height="384" key="GridCell.Tab.0.bottom" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.0.bottom" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.0.bottom/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.0.center" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.0.bottom/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.0.center" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.0.center/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.0.left" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.0.center/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.0.left" timestamp="1781245765561">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.0.left/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.0.right" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.0.left/0.0.1707.930@0.0.1707.930" timestamp="1781245765561" />
+    <state width="1666" height="336" key="GridCell.Tab.0.right" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.0.right/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.1.bottom" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.0.right/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.1.bottom" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.1.bottom/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.1.center" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.1.bottom/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.1.center" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.1.center/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.1.left" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.1.center/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.1.left" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.1.left/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.1.right" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.1.left/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.1.right" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.1.right/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.2.bottom" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.1.right/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.2.bottom" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.2.bottom/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.2.center" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.2.bottom/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.2.center" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.2.center/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.2.left" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.2.center/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.2.left" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.2.left/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state width="1666" height="384" key="GridCell.Tab.2.right" timestamp="1781086061753">
+    <state width="1666" height="336" key="GridCell.Tab.2.left/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state width="1666" height="336" key="GridCell.Tab.2.right" timestamp="1781245765562">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state width="1666" height="384" key="GridCell.Tab.2.right/0.0.1707.930@0.0.1707.930" timestamp="1781086061753" />
-    <state x="611" y="168" key="RollbackChangesDialog" timestamp="1781075524923">
+    <state width="1666" height="336" key="GridCell.Tab.2.right/0.0.1707.930@0.0.1707.930" timestamp="1781245765562" />
+    <state x="611" y="168" key="RollbackChangesDialog" timestamp="1781245146236">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state x="611" y="168" key="RollbackChangesDialog/0.0.1707.930@0.0.1707.930" timestamp="1781075524923" />
-    <state x="379" y="80" key="SettingsEditor" timestamp="1781075361321">
+    <state x="611" y="168" key="RollbackChangesDialog/0.0.1707.930@0.0.1707.930" timestamp="1781245146236" />
+    <state x="379" y="80" key="SettingsEditor" timestamp="1781162937304">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state x="379" y="80" key="SettingsEditor/0.0.1707.930@0.0.1707.930" timestamp="1781075361321" />
+    <state x="379" y="80" key="SettingsEditor/0.0.1707.930@0.0.1707.930" timestamp="1781162937304" />
+    <state x="694" y="382" key="VCS.ChangelistChooser" timestamp="1781167198640">
+      <screen x="0" y="0" width="1707" height="930" />
+    </state>
+    <state x="694" y="382" key="VCS.ChangelistChooser/0.0.1707.930@0.0.1707.930" timestamp="1781167198640" />
+    <state x="447" y="186" key="Vcs.Push.Dialog.v2" timestamp="1781245910088">
+      <screen x="0" y="0" width="1707" height="930" />
+    </state>
+    <state x="447" y="186" key="Vcs.Push.Dialog.v2/0.0.1707.930@0.0.1707.930" timestamp="1781245910088" />
     <state width="859" height="471" key="XDebugger.FullValuePopup" timestamp="1781081697674">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
     <state width="859" height="471" key="XDebugger.FullValuePopup/0.0.1707.930@0.0.1707.930" timestamp="1781081697674" />
-    <state x="539" y="176" width="762" height="578" key="find.popup" timestamp="1781084220714">
+    <state x="658" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1781159275805">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
-    <state x="539" y="176" width="762" height="578" key="find.popup/0.0.1707.930@0.0.1707.930" timestamp="1781084220714" />
+    <state x="658" y="380" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1707.930@0.0.1707.930" timestamp="1781159275805" />
+    <state x="539" y="176" width="762" height="578" key="find.popup" timestamp="1781161456734">
+      <screen x="0" y="0" width="1707" height="930" />
+    </state>
+    <state x="539" y="176" width="762" height="578" key="find.popup/0.0.1707.930@0.0.1707.930" timestamp="1781161456734" />
     <state x="421" y="126" key="new project wizard" timestamp="1781074139273">
       <screen x="0" y="0" width="1707" height="930" />
     </state>
@@ -280,11 +369,6 @@
           <url>file://$PROJECT_DIR$/../np2/np-base/src/main/java/cn/northpark/utils/HTMLParserUtil.java</url>
           <line>2418</line>
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cn/northpark/np5/controller/UserController.java</url>
-          <line>60</line>
-          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

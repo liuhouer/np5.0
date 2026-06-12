@@ -85,7 +85,7 @@
         </section>
 
         <!-- Stats Section -->
-        <section class="bg-gray-900 text-white py-16">
+        <!-- <section class="bg-gray-900 text-white py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                     <div>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
     </main>
 
     <footer th:replace="fragments/footer :: footer"></footer>
@@ -115,7 +115,7 @@
     <script>
         $(document).ready(function () {
             // 获取当前活跃用户数
-            $.ajax({
+            /** $.ajax({
                 url: "/api/v1/auth/active-sessions",
                 type: "GET",
                 dataType: "json",
@@ -124,7 +124,7 @@
                         $("#activeUsers").text(res.activeUsers);
                     }
                 }
-            });
+            }); */
         });
     </script>
 </body>

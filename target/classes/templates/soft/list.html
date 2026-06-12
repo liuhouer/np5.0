@@ -19,19 +19,28 @@
                 <!-- Grid List -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <div th:each="item : ${list}" class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
-                        <div class="p-6">
-                            <!-- Software Icon / Placeholder -->
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-lg">
-                                    <span th:text="${#strings.substring(item.title, 0, 1)}">S</span>
-                                </div>
-                                <span class="px-2.5 py-0.5 rounded-full text-3xs font-semibold bg-gray-100 text-gray-600 uppercase tracking-wide" th:text="${item.os} ?: 'Mac/Win'">OS</span>
-                            </div>
-                            <h2 class="text-base font-semibold text-gray-900 leading-snug line-clamp-2">
-                                <a th:href="@{'/soft/' + ${item.retCode} + '.html'}" th:text="${item.title}" class="hover:text-blue-600 transition-colors">软件名称</a>
-                            </h2>
-                            <p th:if="${item.brief != null}" th:text="${item.brief}" class="text-xs text-gray-500 mt-2 line-clamp-3"></p>
+                <!-- Software Icon / Image -->
+                <div class="relative aspect-video w-full bg-gray-50 overflow-hidden border-b border-gray-50 flex items-center justify-center">
+                    <div th:if="${item.briefImg != null && !item.briefImg.isEmpty()}" class="w-full h-full flex items-center justify-center p-4">
+                        <img th:src="${item.briefImg}" th:alt="${item.title}" class="max-w-[120px] max-h-[120px] object-contain rounded-lg transition-transform duration-300 hover:scale-105" />
+                    </div>
+                    <div th:if="${item.briefImg == null || item.briefImg.isEmpty()}" class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-xl">
+                            <span th:text="${#strings.substring(item.title, 0, 1)}">S</span>
                         </div>
+                    </div>
+                    <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-md text-2xs font-semibold bg-gray-900/80 text-white uppercase tracking-wide backdrop-blur-xs" th:text="${item.os} ?: 'Mac/Win'">OS</span>
+                </div>
+                
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-900 leading-snug line-clamp-2">
+                            <a th:href="@{'/soft/' + ${item.retCode} + '.html'}" th:text="${item.title}" class="hover:text-blue-600 transition-colors">软件名称</a>
+                        </h2>
+                        <p th:if="${item.briefShow != null}" th:text="${item.briefShow}" class="text-xs text-gray-500 mt-2 line-clamp-3"></p>
+                        <p th:if="${item.briefShow == null && item.brief != null}" th:text="${item.brief}" class="text-xs text-gray-500 mt-2 line-clamp-3"></p>
+                    </div>
+                </div>
                         
                         <div>
                             <div class="px-6 py-2 flex flex-wrap gap-1">

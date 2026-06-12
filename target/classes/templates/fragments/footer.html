@@ -1,11 +1,31 @@
 <footer th:fragment="footer" class="bg-white border-t border-gray-200 mt-20">
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
         <div class="text-sm text-gray-500">
-            &copy; 2026 NorthPark. Built with Thymeleaf & Tailwind CSS.
+            &copy; 2026 NorthPark.
         </div>
-        <div class="mt-4 md:mt-0 flex space-x-6">
-            <a href="/about" class="text-sm text-gray-500 hover:text-gray-900">关于我们</a>
-            <a href="/donate" class="text-sm text-gray-500 hover:text-gray-900">支持作者</a>
+        <div class="mt-4 md:mt-0 flex items-center space-x-6">
+            <a href="/about" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">关于我们</a>
+            <a href="/sponsor" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">支持作者</a>
+            <!-- Online Users - Discreet -->
+            <div class="flex items-center text-3xs text-gray-300 font-mono uppercase tracking-tighter pl-6 border-l border-gray-100 hidden md:flex">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
+                ONLINE: <span id="footerActiveUsers" class="ml-1">...</span>
+            </div>
         </div>
     </div>
+    
+    <script>
+        (function() {
+            function updateOnline() {
+                var el = document.getElementById('footerActiveUsers');
+                if(!el) return;
+                fetch('/api/v1/auth/active-sessions')
+                    .then(r => r.json())
+                    .then(d => { if(d.result) el.innerText = d.activeUsers; })
+                    .catch(() => el.innerText = '1');
+            }
+            updateOnline();
+            setInterval(updateOnline, 60000);
+        })();
+    </script>
 </footer>

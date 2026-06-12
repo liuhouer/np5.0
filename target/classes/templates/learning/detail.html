@@ -10,7 +10,7 @@
             <header class="border-b border-gray-100 pb-8 mb-8">
                 <div class="flex items-center space-x-3 mb-4">
                     <span class="text-xs text-gray-400" th:text="${model.postDate}">2026-03-14</span>
-                    <span th:if="${model.price != null && model.price > 0}" class="px-2 py-0.5 rounded-md text-3xs font-semibold bg-green-50 text-green-700" th:text="${model.price} + ' 积分'">0 积分</span>
+<!--                    <span th:if="${model.price != null && model.price > 0}" class="px-2 py-0.5 rounded-md text-3xs font-semibold bg-green-50 text-green-700" th:text="${model.price} + ' 积分'">0 积分</span>-->
                 </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight" th:text="${model.title}">课程/书籍名称</h1>
                 <div class="flex flex-wrap gap-2 mt-4">
@@ -32,14 +32,14 @@
             </div>
 
             <!-- Download Section (Secured) -->
-            <div th:if="${model.linkUrl != null && !model.linkUrl.isEmpty()}" class="mt-12 p-6 bg-gray-50 border border-gray-100 rounded-2xl md:p-8" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+            <div th:if="${model.path != null && !model.path.isEmpty()}" class="mt-12 p-6 bg-gray-50 border border-gray-100 rounded-2xl md:p-8" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     课程链接/直达地址
                 </h3>
                 
                 <th:block sec:authorize="isAuthenticated()">
-                    <div class="bg-white border border-gray-200 rounded-xl p-4 text-sm text-gray-800 leading-relaxed font-mono" th:utext="${model.linkUrl}">
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 text-sm text-gray-800 leading-relaxed font-mono prose max-w-none" th:utext="${model.path}">
                         链接占位
                     </div>
                 </th:block>
