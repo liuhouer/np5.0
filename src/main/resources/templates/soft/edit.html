@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="fragments/head :: head('编辑软件', null, null)" th:with="loadEditor=true">
-    <!-- Quill.js 富文本编辑器 -->
+<head th:replace="fragments/head :: head('编辑软件', null, null)">
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50">
     <header th:replace="fragments/nav :: nav"></header>
@@ -34,26 +33,32 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">下载地址</label>
-                    <div class="editor-wrapper">
-                        <div id="quill_path" class="min-h-[150px]"></div>
+                    <div style="border: 1px solid #e5e7eb; border-radius: 12px;">
+                        <div id="toolbar_path" style="border-bottom: 1px solid #e5e7eb;"></div>
+                        <div id="editor_path" style="min-height: 150px;"></div>
                     </div>
-                    <textarea id="path_hidden" name="path" class="hidden" th:text="${model.path}"></textarea>
+                    <textarea id="path_hidden" name="path" class="hidden" th:utext="${model.path}"></textarea>
+                    <textarea id="path_source" style="width: 100%; margin-top: 10px; padding: 8px; height: 100px; font-family: monospace; font-size: 12px; border: 1px solid #e5e7eb; border-radius: 8px;"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">软件简介</label>
-                    <div class="editor-wrapper">
-                        <div id="quill_brief" class="min-h-[150px]"></div>
+                    <div style="border: 1px solid #e5e7eb; border-radius: 12px;">
+                        <div id="toolbar_brief" style="border-bottom: 1px solid #e5e7eb;"></div>
+                        <div id="editor_brief" style="min-height: 150px;"></div>
                     </div>
-                    <textarea id="brief_hidden" name="brief" class="hidden" th:text="${model.brief}"></textarea>
+                    <textarea id="brief_hidden" name="brief" class="hidden" th:utext="${model.brief}"></textarea>
+                    <textarea id="brief_source" style="width: 100%; margin-top: 10px; padding: 8px; height: 100px; font-family: monospace; font-size: 12px; border: 1px solid #e5e7eb; border-radius: 8px;"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">软件详情</label>
-                    <div class="editor-wrapper">
-                        <div id="quill_content" class="min-h-[250px]"></div>
+                    <div style="border: 1px solid #e5e7eb; border-radius: 12px;">
+                        <div id="toolbar_content" style="border-bottom: 1px solid #e5e7eb;"></div>
+                        <div id="editor_content" style="min-height: 250px;"></div>
                     </div>
-                    <textarea id="content_hidden" name="content" class="hidden" th:text="${model.content}"></textarea>
+                    <textarea id="content_hidden" name="content" class="hidden" th:utext="${model.content}"></textarea>
+                    <textarea id="content_source" style="width: 100%; margin-top: 10px; padding: 8px; height: 150px; font-family: monospace; font-size: 12px; border: 1px solid #e5e7eb; border-radius: 8px;"></textarea>
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -110,110 +115,98 @@
 
     <footer th:replace="fragments/footer :: footer"></footer>
 
-    <!-- Quill.js Scripts -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <!-- wangEditor 富文本编辑器 -->
+    <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+    <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function () {
-            // Quill 编辑器工具栏配置
-            const toolbarOptions = [
-                [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                ['blockquote', 'code', 'code-block'],
-                ['link', 'image', 'video'],
-                ['clean']
-            ];
+            const E = window.wangEditor;
 
-            // 初始化各 Quill 编辑器
-            const quillPath = new Quill('#quill_path', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-            const quillBrief = new Quill('#quill_brief', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-            const quillContent = new Quill('#quill_content', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-
-            // 移动 toolbar 到 editor-wrapper 内部以实现视觉融合
-            document.querySelectorAll('.editor-wrapper').forEach(wrapper => {
-                const toolbar = wrapper.previousElementSibling;
-                if (toolbar && toolbar.classList.contains('ql-toolbar')) {
-                    wrapper.insertBefore(toolbar, wrapper.firstChild);
-                }
-            });
-
-            // 载入已有内容
-            const pathText = document.getElementById('path_hidden').value;
-            if (pathText) quillPath.clipboard.dangerouslyPasteHTML(pathText);
-
-            const briefText = document.getElementById('brief_hidden').value;
-            if (briefText) quillBrief.clipboard.dangerouslyPasteHTML(briefText);
-
-            const contentText = document.getElementById('content_hidden').value;
-            if (contentText) quillContent.clipboard.dangerouslyPasteHTML(contentText);
-
-            // 绑定切换源码功能
-            function enableSourceMode(quillInstance, containerId, hiddenInputId, minHeightClass) {
-                const container = document.getElementById(containerId);
-                const hiddenInput = document.getElementById(hiddenInputId);
-                const wrapper = container.closest('.editor-wrapper');
-                
-                const btnWrapper = document.createElement('div');
-                btnWrapper.className = 'mt-2 flex justify-end';
-                
-                const toggleBtn = document.createElement('button');
-                toggleBtn.type = 'button';
-                toggleBtn.className = 'px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors border border-gray-200 font-semibold';
-                toggleBtn.innerText = '切换 HTML 源码';
-                btnWrapper.appendChild(toggleBtn);
-                
-                wrapper.parentNode.insertBefore(btnWrapper, wrapper.nextSibling);
-                
-                let isSourceMode = false;
-                
-                toggleBtn.addEventListener('click', function() {
-                    const toolbar = wrapper.querySelector('.ql-toolbar');
-                    if (isSourceMode) {
-                        quillInstance.clipboard.dangerouslyPasteHTML(hiddenInput.value);
-                        container.classList.remove('hidden');
-                        if (toolbar) {
-                            toolbar.classList.remove('hidden');
-                        }
-                        hiddenInput.classList.add('hidden');
-                        hiddenInput.className = 'hidden';
-                        toggleBtn.innerText = '切换 HTML 源码';
-                        toggleBtn.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200');
-                        toggleBtn.classList.add('bg-gray-100', 'text-gray-700', 'border-gray-200');
-                    } else {
-                        hiddenInput.value = quillInstance.root.innerHTML;
-                        container.classList.add('hidden');
-                        if (toolbar) {
-                            toolbar.classList.add('hidden');
-                        }
-                        hiddenInput.classList.remove('hidden');
-                        hiddenInput.className = 'source-textarea ' + minHeightClass;
-                        wrapper.appendChild(hiddenInput);
-                        toggleBtn.innerText = '切回富文本编辑';
-                        toggleBtn.classList.remove('bg-gray-100', 'text-gray-700', 'border-gray-200');
-                        toggleBtn.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
-                    }
-                    isSourceMode = !isSourceMode;
-                });
+            function cleanHtml(html) {
+                if (!html) return '';
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                return tempDiv.innerHTML;
             }
 
-            enableSourceMode(quillPath, 'quill_path', 'path_hidden', 'min-h-[150px]');
-            enableSourceMode(quillBrief, 'quill_brief', 'brief_hidden', 'min-h-[150px]');
-            enableSourceMode(quillContent, 'quill_content', 'content_hidden', 'min-h-[250px]');
+            const pathValue = cleanHtml(document.getElementById('path_hidden').value);
+            const briefValue = cleanHtml(document.getElementById('brief_hidden').value);
+            const contentValue = cleanHtml(document.getElementById('content_hidden').value);
+
+            // 初始化下载地址编辑器
+            const editorPath = E.createEditor({
+                selector: '#editor_path',
+                html: pathValue,
+                config: {
+                    placeholder: '请输入内容...',
+                    onChange(editor) {
+                        const html = editor.getHtml();
+                        document.getElementById('path_source').value = html;
+                    }
+                }
+            });
+            E.createToolbar({
+                editor: editorPath,
+                selector: '#toolbar_path',
+                config: {}
+            });
+            document.getElementById('path_source').value = pathValue;
+
+            // 初始化软件简介编辑器
+            const editorBrief = E.createEditor({
+                selector: '#editor_brief',
+                html: briefValue,
+                config: {
+                    placeholder: '请输入内容...',
+                    onChange(editor) {
+                        const html = editor.getHtml();
+                        document.getElementById('brief_source').value = html;
+                    }
+                }
+            });
+            E.createToolbar({
+                editor: editorBrief,
+                selector: '#toolbar_brief',
+                config: {}
+            });
+            document.getElementById('brief_source').value = briefValue;
+
+            // 初始化软件详情编辑器
+            const editorContent = E.createEditor({
+                selector: '#editor_content',
+                html: contentValue,
+                config: {
+                    placeholder: '请输入内容...',
+                    onChange(editor) {
+                        const html = editor.getHtml();
+                        document.getElementById('content_source').value = html;
+                    }
+                }
+            });
+            E.createToolbar({
+                editor: editorContent,
+                selector: '#toolbar_content',
+                config: {}
+            });
+            document.getElementById('content_source').value = contentValue;
+
+            // 源码框编辑时同步到编辑器（鼠标移出后触发）
+            document.getElementById('path_source').addEventListener('blur', function() {
+                editorPath.setHtml(this.value);
+            });
+            document.getElementById('brief_source').addEventListener('blur', function() {
+                editorBrief.setHtml(this.value);
+            });
+            document.getElementById('content_source').addEventListener('blur', function() {
+                editorContent.setHtml(this.value);
+            });
 
             // 提交修改逻辑
             document.getElementById('submitBtn').addEventListener('click', function () {
-                // 将富文本内容写回隐藏域（如果当前不在源码编辑状态）
-                if (document.getElementById('path_hidden').classList.contains('hidden')) {
-                    document.getElementById('path_hidden').value = quillPath.root.innerHTML;
-                }
-                if (document.getElementById('brief_hidden').classList.contains('hidden')) {
-                    document.getElementById('brief_hidden').value = quillBrief.root.innerHTML;
-                }
-                if (document.getElementById('content_hidden').classList.contains('hidden')) {
-                    document.getElementById('content_hidden').value = quillContent.root.innerHTML;
-                }
+                // 将富文本内容写回隐藏域
+                document.getElementById('path_hidden').value = editorPath.getHtml();
+                document.getElementById('brief_hidden').value = editorBrief.getHtml();
+                document.getElementById('content_hidden').value = editorContent.getHtml();
 
                 const form = document.getElementById('editItemForm');
                 const formData = new FormData(form);
