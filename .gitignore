@@ -55,3 +55,4 @@ mbg_config*.xml
 node_modules/
 package-lock.json
 /target/
+/src/main/resources/application.yml

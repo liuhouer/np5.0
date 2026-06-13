@@ -57,6 +57,7 @@ public class SecurityConfig {
                     "/notifications/page/**",
                     "/login",
                     "/signup",
+                    "/auth/**",
                     "/api/v1/auth/forget",
                     "/api/v1/auth/**",
                     "/api/v1/remember-me/**",
