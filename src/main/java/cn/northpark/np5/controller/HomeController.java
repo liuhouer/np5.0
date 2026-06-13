@@ -78,4 +78,9 @@ public class HomeController {
         
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/remember-me-test")
+    public String rememberMeTest(HttpServletRequest request) {
+        return "remember-me-test";
+    }
 }

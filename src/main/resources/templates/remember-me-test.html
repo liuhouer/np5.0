@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('记住我功能测试', null, null)"></head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header th:replace="fragments/nav :: nav"></header>
+
+    <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-6">记住我功能测试</h1>
+                
+                <!-- 登录状态检查 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">1. 当前登录状态</h2>
+                    <button id="checkStatusBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        检查登录状态
+                    </button>
+                    <pre id="statusResult" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm overflow-x-auto"></pre>
+                </div>
+
+                <!-- 令牌统计 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">2. 令牌统计</h2>
+                    <button id="getStatsBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        获取统计信息
+                    </button>
+                    <pre id="statsResult" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm overflow-x-auto"></pre>
+                </div>
+
+                <!-- 查看所有令牌 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">3. 所有令牌列表</h2>
+                    <button id="getAllTokensBtn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                        查看所有令牌
+                    </button>
+                    <pre id="tokensResult" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm overflow-x-auto max-h-96"></pre>
+                </div>
+
+                <!-- 测试说明 -->
+                <div class="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
+                    <h3 class="font-semibold text-blue-900 mb-3">测试步骤：</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-sm text-blue-800">
+                        <li>登录时勾选"记住我"选项</li>
+                        <li>登录成功后，关闭浏览器</li>
+                        <li>重新打开浏览器访问网站</li>
+                        <li>应该会自动登录，无需再次输入密码</li>
+                        <li>使用此页面可以查看令牌的创建和管理情况</li>
+                    </ol>
+                </div>
+
+                <!-- 技术实现说明 -->
+                <div class="mt-6 p-6 bg-green-50 rounded-xl border border-green-100">
+                    <h3 class="font-semibold text-green-900 mb-3">技术实现：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-green-800">
+                        <li>基于 Spring Security RememberMe 机制</li>
+                        <li>令牌存储在 Redis 中，支持集群部署</li>
+                        <li>采用 Series-Token 模式，安全性高</li>
+                        <li>令牌有效期 30 天，自动过期</li>
+                        <li>每次自动登录会刷新 Token，防止令牌被盗用</li>
+                        <li>退出登录时自动清除 Redis 中的令牌</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <script>
+        $(document).ready(function() {
+            // 检查登录状态
+            $("#checkStatusBtn").click(function() {
+                $.ajax({
+                    url: "/api/v1/remember-me/status",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#statusResult").text(JSON.stringify(data, null, 2));
+                    },
+                    error: function(xhr) {
+                        $("#statusResult").text("请求失败: " + xhr.status);
+                    }
+                });
+            });
+
+            // 获取统计信息
+            $("#getStatsBtn").click(function() {
+                $.ajax({
+                    url: "/api/v1/remember-me/stats",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#statsResult").text(JSON.stringify(data, null, 2));
+                    },
+                    error: function(xhr) {
+                        $("#statsResult").text("请求失败: " + xhr.status);
+                    }
+                });
+            });
+
+            // 获取所有令牌
+            $("#getAllTokensBtn").click(function() {
+                $.ajax({
+                    url: "/api/v1/remember-me/tokens",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#tokensResult").text(JSON.stringify(data, null, 2));
+                    },
+                    error: function(xhr) {
+                        $("#tokensResult").text("请求失败: " + xhr.status);
+                    }
+                });
+            });
+
+            // 页面加载时自动检查状态
+            $("#checkStatusBtn").click();
+        });
+    </script>
+</body>
+</html>

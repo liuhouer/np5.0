@@ -1,7 +1,9 @@
 package cn.northpark.np5.controller;
 
+import cn.northpark.np5.config.RedisRememberMeServices;
 import cn.northpark.np5.model.User;
 import cn.northpark.np5.service.UserService;
+import cn.northpark.np5.utils.AuthorityBuilder;
 import cn.northpark.np5.utils.EmailUtils;
 import cn.northpark.np5.utils.encrypt.NorthParkCryptUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,9 @@ public class UserController {
 
     @Autowired
     private SessionRegistry sessionRegistry;
+
+    @Autowired
+    private RedisRememberMeServices rememberMeServices;
 
     /**
      * 跳转至登录页面
@@ -78,7 +83,8 @@ public class UserController {
     @ResponseBody
     public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response,
                                      @RequestParam("email") String email,
-                                     @RequestParam("password") String password) {
+                                     @RequestParam("password") String password,
+                                     @RequestParam(value = "remember-me", required = false) String rememberMe) {
         Map<String, Object> result = new HashMap<>();
         if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
             result.put("result", false);
@@ -97,13 +103,8 @@ public class UserController {
                     return result;
                 }
 
-                // 使用 Spring Security Context 保存登录状态，取代传统 Session 注入
-                List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                // 判定是否是管理员用户 (ID 为 507723, 508200)
-                if (user.getId() != null && (user.getId() == 507723 || user.getId() == 508200)) {
-                    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-                }
+                // 使用统一的权限构建工具
+                List<GrantedAuthority> authorities = AuthorityBuilder.buildAuthorities(user);
                 
                 // 将 Principal 设置为当前 User 实体，以便 SessionRegistry 识别活跃 Principal
                 org.springframework.security.core.userdetails.User springUser = 
@@ -118,6 +119,12 @@ public class UserController {
 
                 session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
                 session.setAttribute("user", user);
+
+                // 处理"记住我"功能
+                if ("on".equals(rememberMe) || "true".equals(rememberMe)) {
+                    log.info("用户选择了记住我功能: {}", email);
+                    rememberMeServices.loginSuccess(request, response, authenticationToken);
+                }
 
                 // 更新最近登录信息
                 user.setLastLogin(LocalDate.now().toString());
@@ -276,13 +283,8 @@ public class UserController {
 
             userService.save(user);
 
-            // 使用 Spring Security Context 保存登录状态，取代传统 Session 注入
-            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-            // 判定是否是管理员用户 (ID 为 507723, 508200)
-            if (user.getId() != null && (user.getId() == 507723 || user.getId() == 508200)) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            }
+            // 使用统一的权限构建工具
+            List<GrantedAuthority> authorities = AuthorityBuilder.buildAuthorities(user);
             
             // 将 Principal 设置为当前 User 实体，以便 SessionRegistry 识别活跃 Principal
             org.springframework.security.core.userdetails.User springUser = 
@@ -324,7 +326,7 @@ public class UserController {
     /**
      * 跳转至找回密码页面
      */
-    @GetMapping("/cm/forget")
+    @GetMapping("/api/v1/auth/forget")
     public String forgetPage() {
         return "forget";
     }

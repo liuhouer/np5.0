@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="text-sm">
-                        <a th:href="@{/cm/forget}" class="font-medium text-blue-600 hover:text-blue-500">
+                        <a th:href="@{/api/v1/auth/forget}" class="font-medium text-blue-600 hover:text-blue-500">
                             忘记密码？
                         </a>
                     </div>
@@ -67,6 +67,8 @@
             $("#loginBtn").click(function () {
                 var email = $("#email").val();
                 var password = $("#password").val();
+                var rememberMe = $("#remember-me").is(":checked");
+                
                 if (!email || !password) {
                     Swal.fire({
                         icon: 'warning',
@@ -86,7 +88,8 @@
                     type: "POST",
                     data: {
                         email: email,
-                        password: password
+                        password: password,
+                        "remember-me": rememberMe ? "on" : ""
                     },
                     dataType: "json",
                     success: function (res) {
