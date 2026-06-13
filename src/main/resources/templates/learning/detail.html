@@ -72,6 +72,11 @@
             </div>
         </article>
 
+        <!-- 评论区域 -->
+        <div class="mt-12 border-t border-gray-200 pt-8">
+            <div th:replace="fragments/comment :: comment(${model.id}, '8')"></div>
+        </div>
+
         <!-- Back to list -->
         <div class="mt-8 text-center">
             <a href="/learning" class="text-sm font-medium text-blue-600 hover:text-blue-500">&larr; 返回课程列表</a>

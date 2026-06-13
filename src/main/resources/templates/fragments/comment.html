@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+    <!-- 评论组件 Fragment -->
+    <th:block th:fragment="comment(topicId, topicType)">
+        <div class="comment-section">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">评论区</h2>
+            
+            <!-- 发布评论区 (仅登录用户可见) -->
+            <div sec:authorize="isAuthenticated()" class="mb-8">
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                    <textarea 
+                        id="commentInput" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all" 
+                        rows="4" 
+                        placeholder="写下你的评论..."
+                        maxlength="500"></textarea>
+                    <div class="mt-4 flex items-center justify-between">
+                        <span class="text-sm text-gray-500">
+                            <span id="charCount">0</span>/500 字
+                        </span>
+                        <button 
+                            onclick="postComment()" 
+                            class="px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium">
+                            发布评论
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 未登录提示 -->
+            <div sec:authorize="!isAuthenticated()" class="mb-8">
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 text-center">
+                    <p class="text-gray-600 mb-4">登录后即可发表评论</p>
+                    <a th:href="@{/login(redirectURI=${#httpServletRequest.requestURI})}" 
+                       class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
+                        立即登录
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 评论列表 -->
+            <div id="commentList" class="space-y-4">
+                <!-- 评论项将通过 JavaScript 动态加载 -->
+            </div>
+            
+            <!-- 评论为空提示 -->
+            <div id="emptyCommentTip" class="hidden text-center py-12 text-gray-500">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                <p class="text-lg">暂无评论，快来抢沙发吧~</p>
+            </div>
+        </div>
+
+        <!-- 评论脚本 -->
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            (function() {
+                var TOPIC_ID = [[${topicId}]];
+                var TOPIC_TYPE = [[${topicType}]];
+                var IS_AUTHENTICATED = [[${#authorization.expression('isAuthenticated()')}]];
+
+                console.log('评论组件初始化：topicId=' + TOPIC_ID + ', topicType=' + TOPIC_TYPE);
+
+                // 字符计数
+                var commentInput = document.getElementById('commentInput');
+                if (commentInput) {
+                    commentInput.addEventListener('input', function() {
+                        document.getElementById('charCount').textContent = this.value.length;
+                    });
+                }
+
+                // 立即加载评论列表
+                loadComments();
+
+                // 加载评论列表
+                function loadComments() {
+                    console.log('开始加载评论列表...');
+                    fetch('/topicComment/list?topicId=' + TOPIC_ID + '&topicType=' + TOPIC_TYPE)
+                        .then(function(res) { return res.json(); })
+                        .then(function(data) {
+                            console.log('评论数据:', data);
+                            if (data.result && data.data) {
+                                renderComments(data.data);
+                            } else {
+                                showEmptyTip();
+                            }
+                        })
+                        .catch(function(err) {
+                            console.error('加载评论失败', err);
+                            showEmptyTip();
+                        });
+                }
+
+                // 渲染评论列表
+                function renderComments(comments) {
+                    var listContainer = document.getElementById('commentList');
+                    var emptyTip = document.getElementById('emptyCommentTip');
+                    
+                    if (!comments || comments.length === 0) {
+                        showEmptyTip();
+                        return;
+                    }
+                    
+                    emptyTip.classList.add('hidden');
+                    listContainer.innerHTML = '';
+                    
+                    comments.forEach(function(comment) {
+                        var commentItem = createCommentItem(comment);
+                        listContainer.appendChild(commentItem);
+                    });
+                }
+
+                // 创建单个评论项
+                function createCommentItem(comment) {
+                    var div = document.createElement('div');
+                    div.className = 'bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow';
+                    
+                    var avatarColor = getAvatarColor(comment.fromSpan || 'A');
+                    var replyInfo = comment.toUname ? 
+                        '<span class="text-gray-500">回复</span> <span class="text-blue-600 font-medium">@' + escapeHtml(comment.toUname) + '</span>' : '';
+                    
+                    div.innerHTML = 
+                        '<div class="flex items-start space-x-4">' +
+                            '<div class="flex-shrink-0">' +
+                                '<div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg" style="background: ' + avatarColor + '">' +
+                                    (comment.fromSpan || 'A').toUpperCase() +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="flex-1 min-w-0">' +
+                                '<div class="flex items-center space-x-2 mb-2">' +
+                                    '<span class="font-semibold text-gray-900">' + escapeHtml(comment.fromUname) + '</span>' +
+                                    replyInfo +
+                                    '<span class="text-sm text-gray-400">' + comment.addTime + '</span>' +
+                                '</div>' +
+                                '<p class="text-gray-700 leading-relaxed">' + escapeHtml(comment.content) + '</p>' +
+                                (IS_AUTHENTICATED ? 
+                                    '<button onclick="toggleReply(' + comment.id + ', \'' + escapeHtml(comment.fromUname) + '\', ' + comment.fromUid + ')" class="mt-3 text-sm text-gray-500 hover:text-blue-600 transition-colors flex items-center">' +
+                                        '<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>' +
+                                        '回复' +
+                                    '</button>' : '') +
+                                '<div id="replyBox_' + comment.id + '" class="hidden mt-4">' +
+                                    '<textarea id="replyInput_' + comment.id + '" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="3" placeholder="回复 @' + escapeHtml(comment.fromUname) + '" maxlength="500"></textarea>' +
+                                    '<div class="mt-2 flex justify-end space-x-2">' +
+                                        '<button onclick="cancelReply(' + comment.id + ')" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">取消</button>' +
+                                        '<button onclick="submitReply(' + comment.id + ', ' + comment.fromUid + ', \'' + escapeHtml(comment.fromUname) + '\')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">发送</button>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+                    
+                    return div;
+                }
+
+                function getAvatarColor(letter) {
+                    var colors = [
+                        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                        'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                        'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                        'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
+                    ];
+                    return colors[letter.charCodeAt(0) % colors.length];
+                }
+
+                function showEmptyTip() {
+                    document.getElementById('commentList').innerHTML = '';
+                    document.getElementById('emptyCommentTip').classList.remove('hidden');
+                }
+
+                window.postComment = function() {
+                    if (!IS_AUTHENTICATED) {
+                        Swal.fire({ icon: 'warning', title: '请先登录' });
+                        return;
+                    }
+                    
+                    var content = document.getElementById('commentInput').value.trim();
+                    if (!content) {
+                        Swal.fire({ icon: 'warning', title: '请输入评论内容' });
+                        return;
+                    }
+                    
+                    var formData = new FormData();
+                    formData.append('topicId', TOPIC_ID);
+                    formData.append('topicType', TOPIC_TYPE);
+                    formData.append('content', content);
+                    
+                    fetch('/topicComment/add', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data.result) {
+                            Swal.fire({ icon: 'success', title: '评论成功', timer: 1500, showConfirmButton: false });
+                            document.getElementById('commentInput').value = '';
+                            document.getElementById('charCount').textContent = '0';
+                            loadComments();
+                        } else {
+                            Swal.fire({ icon: 'error', title: '评论失败', text: data.message });
+                        }
+                    })
+                    .catch(function(err) {
+                        Swal.fire({ icon: 'error', title: '网络错误', text: '评论失败，请稍后重试' });
+                    });
+                };
+
+                window.toggleReply = function(commentId, username, toUid) {
+                    var replyBox = document.getElementById('replyBox_' + commentId);
+                    if (replyBox.classList.contains('hidden')) {
+                        document.querySelectorAll('[id^="replyBox_"]').forEach(function(box) {
+                            box.classList.add('hidden');
+                        });
+                        replyBox.classList.remove('hidden');
+                        document.getElementById('replyInput_' + commentId).focus();
+                    } else {
+                        replyBox.classList.add('hidden');
+                    }
+                };
+
+                window.cancelReply = function(commentId) {
+                    document.getElementById('replyBox_' + commentId).classList.add('hidden');
+                    document.getElementById('replyInput_' + commentId).value = '';
+                };
+
+                window.submitReply = function(commentId, toUid, toUname) {
+                    var content = document.getElementById('replyInput_' + commentId).value.trim();
+                    if (!content) {
+                        Swal.fire({ icon: 'warning', title: '请输入回复内容' });
+                        return;
+                    }
+                    
+                    var formData = new FormData();
+                    formData.append('topicId', TOPIC_ID);
+                    formData.append('topicType', TOPIC_TYPE);
+                    formData.append('content', content);
+                    formData.append('toUid', toUid);
+                    formData.append('toUname', toUname);
+                    
+                    fetch('/topicComment/add', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data.result) {
+                            Swal.fire({ icon: 'success', title: '回复成功', timer: 1500, showConfirmButton: false });
+                            window.cancelReply(commentId);
+                            loadComments();
+                        } else {
+                            Swal.fire({ icon: 'error', title: '回复失败', text: data.message });
+                        }
+                    })
+                    .catch(function(err) {
+                        Swal.fire({ icon: 'error', title: '网络错误', text: '回复失败，请稍后重试' });
+                    });
+                };
+
+                function escapeHtml(text) {
+                    if (!text) return '';
+                    var div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+            })();
+            /*]]>*/
+        </script>
+    </th:block>
+</body>
+</html>

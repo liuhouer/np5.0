@@ -85,6 +85,11 @@
                 </th:block>
             </div>
         </article>
+
+        <!-- 评论区域 -->
+        <div class="mt-12 border-t border-gray-200 pt-8">
+            <div th:replace="fragments/comment :: comment(${model.id}, '4')"></div>
+        </div>
     </main>
 
     <footer th:replace="fragments/footer :: footer"></footer>

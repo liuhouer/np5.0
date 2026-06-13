@@ -51,6 +51,7 @@ public class SecurityConfig {
                     "/about",
                     "/sponsor",
                     "/sponsor/list",
+                    "/topicComment/list",
                     "/notify/count",
                     "/notify/readNotify",
                     "/notifications",
