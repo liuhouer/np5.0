@@ -98,6 +98,10 @@ public class SecurityConfig {
                 .maximumSessions(-1)
                 .sessionRegistry(sessionRegistry());
 
+        http
+            .exceptionHandling()
+                .accessDeniedPage("/error?status=403");
+
         return http.build();
     }
 
