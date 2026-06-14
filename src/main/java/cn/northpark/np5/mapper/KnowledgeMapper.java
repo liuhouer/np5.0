@@ -1,6 +1,6 @@
 package cn.northpark.np5.mapper;
 
-import cn.northpark.np5.model.Knowledge;
+import cn.northpark.np5.entity.Knowledge;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -1,7 +1,7 @@
 package cn.northpark.np5.service.impl;
 
 import cn.northpark.np5.mapper.SoftMapper;
-import cn.northpark.np5.model.Soft;
+import cn.northpark.np5.entity.Soft;
 import cn.northpark.np5.service.SoftService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package cn.northpark.np5.service.impl;
 
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 import cn.northpark.np5.service.UserService;
 import cn.northpark.np5.utils.AuthorityBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

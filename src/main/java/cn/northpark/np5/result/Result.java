@@ -1,4 +1,4 @@
-package cn.northpark.np5.model;
+package cn.northpark.np5.result;
 
 import lombok.Data;
 

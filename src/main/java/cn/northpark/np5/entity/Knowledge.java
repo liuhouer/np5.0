@@ -1,4 +1,4 @@
-package cn.northpark.np5.model;
+package cn.northpark.np5.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@TableName("bc_movies")
-public class Movies implements Serializable {
+@TableName("bc_knowledge")
+public class Knowledge implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
@@ -20,17 +20,25 @@ public class Movies implements Serializable {
 
     private String retCode;
 
-    private String movieName;
+    private String title;
+
+    private String briefImg;
+
+    private String brief;
+
+    private String postDate;
 
     private Integer price;
 
-    private String addTime;
+    private String tags;
 
-    private String tag;
+    private String tagsCode;
 
-    private String tagCode;
+    private String retUrl;
 
-    private Integer viewNum;
+    private String linkUrl;
+
+    private Long viewTimes;
 
     private String color;
 
@@ -38,15 +46,10 @@ public class Movies implements Serializable {
 
     private String displayed;
 
-    private String brief;
-
-    private String movieDesc;
+    private String content;
 
     private String path;
 
     @TableField(exist = false)
     private List<Map<String, String>> tagList;
-
-    @TableField(exist = false)
-    private String imgUrl;
 }

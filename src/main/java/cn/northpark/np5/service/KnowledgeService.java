@@ -1,6 +1,6 @@
 package cn.northpark.np5.service;
 
-import cn.northpark.np5.model.Knowledge;
+import cn.northpark.np5.entity.Knowledge;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

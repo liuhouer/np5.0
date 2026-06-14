@@ -2,7 +2,7 @@ package cn.northpark.np5.service.impl;
 
 import cn.northpark.np5.config.OAuthConfig;
 import cn.northpark.np5.mapper.UserMapper;
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 import cn.northpark.np5.service.OAuthService;
 import cn.northpark.np5.utils.PinyinUtil;
 import cn.hutool.http.HttpUtil;
@@ -20,9 +20,7 @@ import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 
 @Slf4j

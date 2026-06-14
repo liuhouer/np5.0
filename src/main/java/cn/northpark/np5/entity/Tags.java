@@ -1,4 +1,4 @@
-package cn.northpark.np5.model;
+package cn.northpark.np5.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

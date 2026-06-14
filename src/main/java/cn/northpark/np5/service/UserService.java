@@ -1,6 +1,6 @@
 package cn.northpark.np5.service;
 
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface UserService extends IService<User> {

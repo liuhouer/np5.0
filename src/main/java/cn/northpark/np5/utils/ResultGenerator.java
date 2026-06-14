@@ -1,6 +1,6 @@
 package cn.northpark.np5.utils;
 
-import cn.northpark.np5.model.Result;
+import cn.northpark.np5.result.Result;
 import lombok.extern.slf4j.Slf4j;
 
 /**

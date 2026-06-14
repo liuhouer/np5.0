@@ -1,7 +1,7 @@
 package cn.northpark.np5.utils;
 
 import cn.northpark.np5.mapper.EnvCfgMapper;
-import cn.northpark.np5.model.EnvCfg;
+import cn.northpark.np5.entity.EnvCfg;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

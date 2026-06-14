@@ -1,6 +1,6 @@
 package cn.northpark.np5.utils;
 
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

@@ -1,6 +1,6 @@
 package cn.northpark.np5.mapper;
 
-import cn.northpark.np5.model.Donates;
+import cn.northpark.np5.entity.Donates;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

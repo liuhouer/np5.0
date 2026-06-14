@@ -1,6 +1,6 @@
 package cn.northpark.np5.service;
 
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 
 public interface OAuthService {
 

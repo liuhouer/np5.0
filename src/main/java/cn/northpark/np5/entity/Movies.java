@@ -1,20 +1,18 @@
-package cn.northpark.np5.model;
+package cn.northpark.np5.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 @Data
-@TableName("bc_soft")
-@Alias("soft_linked")
-public class Soft implements Serializable {
+@TableName("bc_movies")
+public class Movies implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
@@ -22,23 +20,17 @@ public class Soft implements Serializable {
 
     private String retCode;
 
-    private String title;
+    private String movieName;
 
-    private String contentMinio;
+    private Integer price;
 
-    private String year;
+    private String addTime;
 
-    private String month;
+    private String tag;
 
-    private String postDate;
+    private String tagCode;
 
-    private String os;
-
-    private String tags;
-
-    private String tagsCode;
-
-    private String retUrl;
+    private Integer viewNum;
 
     private String color;
 
@@ -46,11 +38,9 @@ public class Soft implements Serializable {
 
     private String displayed;
 
-    private String useMinio;
-
     private String brief;
 
-    private String content;
+    private String movieDesc;
 
     private String path;
 
@@ -58,8 +48,5 @@ public class Soft implements Serializable {
     private List<Map<String, String>> tagList;
 
     @TableField(exist = false)
-    private String briefImg;
-
-    @TableField(exist = false)
-    private String briefShow;
+    private String imgUrl;
 }

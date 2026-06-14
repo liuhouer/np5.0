@@ -1,9 +1,8 @@
 package cn.northpark.np5.controller;
 
-import cn.northpark.np5.model.Knowledge;
-import cn.northpark.np5.model.Result;
-import cn.northpark.np5.model.Tags;
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.Knowledge;
+import cn.northpark.np5.entity.Tags;
+import cn.northpark.np5.result.Result;
 import cn.northpark.np5.service.KnowledgeService;
 import cn.northpark.np5.service.TagsService;
 import cn.northpark.np5.utils.ResultGenerator;
@@ -16,17 +15,16 @@ import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequestMapping("/learning")

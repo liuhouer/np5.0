@@ -1,18 +1,20 @@
-package cn.northpark.np5.model;
+package cn.northpark.np5.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 @Data
-@TableName("bc_knowledge")
-public class Knowledge implements Serializable {
+@TableName("bc_soft")
+@Alias("soft_linked")
+public class Soft implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
@@ -22,13 +24,15 @@ public class Knowledge implements Serializable {
 
     private String title;
 
-    private String briefImg;
+    private String contentMinio;
 
-    private String brief;
+    private String year;
+
+    private String month;
 
     private String postDate;
 
-    private Integer price;
+    private String os;
 
     private String tags;
 
@@ -36,15 +40,15 @@ public class Knowledge implements Serializable {
 
     private String retUrl;
 
-    private String linkUrl;
-
-    private Long viewTimes;
-
     private String color;
 
     private Integer hotIndex;
 
     private String displayed;
+
+    private String useMinio;
+
+    private String brief;
 
     private String content;
 
@@ -52,4 +56,10 @@ public class Knowledge implements Serializable {
 
     @TableField(exist = false)
     private List<Map<String, String>> tagList;
+
+    @TableField(exist = false)
+    private String briefImg;
+
+    @TableField(exist = false)
+    private String briefShow;
 }

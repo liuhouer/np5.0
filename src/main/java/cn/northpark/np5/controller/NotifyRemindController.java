@@ -1,8 +1,8 @@
 package cn.northpark.np5.controller;
 
 import cn.northpark.np5.entity.NotifyRemind;
-import cn.northpark.np5.model.Result;
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.result.Result;
+import cn.northpark.np5.entity.User;
 import cn.northpark.np5.service.NotifyRemindService;
 import cn.northpark.np5.utils.ResultGenerator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

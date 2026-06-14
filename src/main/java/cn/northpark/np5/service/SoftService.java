@@ -1,6 +1,6 @@
 package cn.northpark.np5.service;
 
-import cn.northpark.np5.model.Soft;
+import cn.northpark.np5.entity.Soft;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

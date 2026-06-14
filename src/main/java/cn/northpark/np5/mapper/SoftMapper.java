@@ -1,6 +1,6 @@
 package cn.northpark.np5.mapper;
 
-import cn.northpark.np5.model.Soft;
+import cn.northpark.np5.entity.Soft;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

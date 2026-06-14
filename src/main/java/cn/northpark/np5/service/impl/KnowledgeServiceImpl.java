@@ -1,7 +1,7 @@
 package cn.northpark.np5.service.impl;
 
 import cn.northpark.np5.mapper.KnowledgeMapper;
-import cn.northpark.np5.model.Knowledge;
+import cn.northpark.np5.entity.Knowledge;
 import cn.northpark.np5.service.KnowledgeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

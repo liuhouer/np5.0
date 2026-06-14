@@ -1,8 +1,8 @@
 package cn.northpark.np5.controller;
 
 import cn.northpark.np5.config.RedisRememberMeServices;
-import cn.northpark.np5.model.User;
-import cn.northpark.np5.model.Result;
+import cn.northpark.np5.entity.User;
+import cn.northpark.np5.result.Result;
 import cn.northpark.np5.service.OAuthService;
 import cn.northpark.np5.utils.AuthorityBuilder;
 import cn.northpark.np5.utils.ResultGenerator;

@@ -1,7 +1,7 @@
 package cn.northpark.np5.service.impl;
 
 import cn.northpark.np5.mapper.UserMapper;
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 import cn.northpark.np5.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

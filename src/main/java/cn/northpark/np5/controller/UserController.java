@@ -1,7 +1,7 @@
 package cn.northpark.np5.controller;
 
 import cn.northpark.np5.config.RedisRememberMeServices;
-import cn.northpark.np5.model.User;
+import cn.northpark.np5.entity.User;
 import cn.northpark.np5.service.UserService;
 import cn.northpark.np5.utils.AuthorityBuilder;
 import cn.northpark.np5.utils.EmailUtils;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
