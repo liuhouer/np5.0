@@ -18,6 +18,15 @@
                     <pre id="statusResult" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm overflow-x-auto"></pre>
                 </div>
 
+                <!-- 在线人数统计 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">当前在线人数</h2>
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg text-sm">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+                        当前在线：<span id="activeUsersCount" class="font-bold text-blue-600 ml-1">...</span>
+                    </div>
+                </div>
+
                 <!-- 令牌统计 -->
                 <div class="mb-8">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">2. 令牌统计</h2>
@@ -98,6 +107,25 @@
                     }
                 });
             });
+
+            // 获取在线人数统计
+            function updateOnline() {
+                $.ajax({
+                    url: "/api/v1/auth/active-sessions",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.result) {
+                            $("#activeUsersCount").text(data.activeUsers);
+                        }
+                    },
+                    error: function(xhr) {
+                        $("#activeUsersCount").text("获取失败");
+                    }
+                });
+            }
+            updateOnline();
+            setInterval(updateOnline, 30000);
 
             // 获取所有令牌
             $("#getAllTokensBtn").click(function() {

@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +37,6 @@ public class NotifyRemindController {
 
     @Autowired
     private NotifyRemindService notifyRemindService;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     private static final int PAGE_SIZE = 15;
 
@@ -90,8 +86,16 @@ public class NotifyRemindController {
                     return ResultGenerator.genSuccessResult(false);
                 }
 
-                String readNotifySql = "update bc_notify_remind_b set status = ? where recipient_id = ? and id in (" + ids + ")";
-                jdbcTemplate.update(readNotifySql, "1", userInfo.getId().toString());
+                // 重构：使用 MyBatis-Plus Service 进行批量更新
+                // 将 status 设置为 "1"
+                NotifyRemind updateObj = new NotifyRemind();
+                updateObj.setStatus("1");
+
+                QueryWrapper<NotifyRemind> updateWrapper = new QueryWrapper<>();
+                updateWrapper.eq("recipient_id", userInfo.getId().toString())
+                             .in("id", cn.hutool.core.util.StrUtil.split(ids, ","));
+
+                notifyRemindService.update(updateObj, updateWrapper);
             }
         } catch (Exception e) {
             log.error("notify/readNotify error", e);

@@ -60,7 +60,14 @@ public class SecurityConfig {
                     "/signup",
                     "/auth/**",
                     "/api/v1/auth/forget",
-                    "/api/v1/auth/**",
+                    "/api/v1/auth/login",
+                    "/api/v1/auth/register-email",
+                    "/api/v1/auth/verify-email-code",
+                    "/api/v1/auth/signup",
+                    "/api/v1/auth/forget-code",
+                    "/api/v1/auth/verify-forget-code",
+                    "/api/v1/auth/reset-password",
+                    "/api/v1/auth/email-flag",
                     "/api/v1/remember-me/**",
                     "/static/**",
                     "/css/**",
@@ -78,7 +85,8 @@ public class SecurityConfig {
                     "/learning/handup",
                     "/learning/hideup",
                     "/learning/edit/**",
-                    "/remember-me-test"// 统计记住登录的信息
+                    "/remember-me-test", // 统计记住登录的信息
+                    "/api/v1/auth/active-sessions"
                 ).hasRole("ADMIN")
                 // 需要认证的路由（如评论、下载等，后台管理可以进一步配置）
                 .anyRequest().authenticated()

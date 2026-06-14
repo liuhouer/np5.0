@@ -3,11 +3,8 @@ package cn.northpark.np5.utils;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.var;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,57 +19,43 @@ import java.util.concurrent.ConcurrentMap;
 @Component
 public class NotifyUtil {
 
-    private static JdbcTemplate jdbcTemplateInstance;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @PostConstruct
-    public void init() {
-        jdbcTemplateInstance = this.jdbcTemplate;
-    }
-
-    private static List<Map<String, Object>> querySql(String sql, Object... params) {
-        return jdbcTemplateInstance.queryForList(sql, params);
-    }
-
-    private static Map<String, Object> findById(String tableName, Integer id) {
-        String sql = "select * from " + tableName + " where id = ?";
-        List<Map<String, Object>> list = querySql(sql, id);
-        return CollectionUtils.isNotEmpty(list) ? list.get(0) : null;
-    }
-
     public static Map<String, String> getObjectContent(String topicType, Integer topicId) {
         ConcurrentMap<String, String> map = new ConcurrentHashMap<>();
         try {
             if ("1".equals(topicType)) {
-                Map<String, Object> bcNote = findById("bc_note", topicId);
-                if (bcNote != null) {
+                // 重构：使用 MyBatis-Plus / SpringContextUtils 执行通用查询，不直接用 jdbcTemplateInstance
+                List<Map<String, Object>> list = getSqlResult("select * from bc_note where id = ?", topicId);
+                if (CollectionUtils.isNotEmpty(list)) {
+                    Map<String, Object> bcNote = list.get(0);
                     map.put("title", bcNote.get("brief").toString());
                     map.put("href", "/note");
                     map.put("by", bcNote.get("userid").toString());
                 }
             } else if ("2".equals(topicType)) {
-                Map<String, Object> bcLyrics = findById("bc_lyrics", topicId);
-                if (bcLyrics != null) {
+                List<Map<String, Object>> list = getSqlResult("select * from bc_lyrics where id = ?", topicId);
+                if (CollectionUtils.isNotEmpty(list)) {
+                    Map<String, Object> bcLyrics = list.get(0);
                     map.put("title", bcLyrics.get("title").toString());
                     map.put("href", "/love/" + bcLyrics.get("title_code") + ".html");
                 }
             } else if ("3".equals(topicType)) {
-                Map<String, Object> bcSoft = findById("bc_soft", topicId);
-                if (bcSoft != null) {
+                List<Map<String, Object>> list = getSqlResult("select * from bc_soft where id = ?", topicId);
+                if (CollectionUtils.isNotEmpty(list)) {
+                    Map<String, Object> bcSoft = list.get(0);
                     map.put("title", bcSoft.get("title").toString());
                     map.put("href", "/soft/" + bcSoft.get("ret_code") + ".html");
                 }
             } else if ("4".equals(topicType)) {
-                Map<String, Object> bcMovies = findById("bc_movies", topicId);
-                if (bcMovies != null) {
+                List<Map<String, Object>> list = getSqlResult("select * from bc_movies where id = ?", topicId);
+                if (CollectionUtils.isNotEmpty(list)) {
+                    Map<String, Object> bcMovies = list.get(0);
                     map.put("title", bcMovies.get("movie_name").toString());
                     map.put("href", "/movies/post-" + topicId + ".html");
                 }
             } else if ("6".equals(topicType)) {
-                Map<String, Object> bcEq = findById("bc_eq", topicId);
-                if (bcEq != null) {
+                List<Map<String, Object>> list = getSqlResult("select * from bc_eq where id = ?", topicId);
+                if (CollectionUtils.isNotEmpty(list)) {
+                    Map<String, Object> bcEq = list.get(0);
                     map.put("title", bcEq.get("title").toString());
                     map.put("href", "/romeo/" + topicId + ".html");
                 }
@@ -80,8 +63,9 @@ public class NotifyUtil {
                 map.put("title", "赞助本站");
                 map.put("href", "/donate");
             } else if ("8".equals(topicType)) {
-                Map<String, Object> bcLearn = findById("bc_knowledge", topicId);
-                if (bcLearn != null) {
+                List<Map<String, Object>> list = getSqlResult("select * from bc_knowledge where id = ?", topicId);
+                if (CollectionUtils.isNotEmpty(list)) {
+                    Map<String, Object> bcLearn = list.get(0);
                     map.put("title", bcLearn.get("title").toString());
                     map.put("href", "/learning/post-" + topicId + ".html");
                 }
@@ -97,7 +81,7 @@ public class NotifyUtil {
         if (StringUtils.isBlank(uid)) {
             return "";
         }
-        var list = querySql("select username from bc_user where id = ?", uid);
+        var list = getSqlResult("select username from bc_user where id = ?", uid);
         if (CollectionUtils.isNotEmpty(list)) {
             return Objects.toString(list.get(0).get("username"), "");
         }
@@ -108,10 +92,26 @@ public class NotifyUtil {
         if (StringUtils.isBlank(uid)) {
             return "";
         }
-        var list = querySql("select email from bc_user where id = ?", uid);
+        var list = getSqlResult("select email from bc_user where id = ?", uid);
         if (CollectionUtils.isNotEmpty(list)) {
             return Objects.toString(list.get(0).get("email"), "");
         }
         return "";
+    }
+
+    /**
+     * 重构：通过 MyBatis-Plus SoftService 提供的通用SQL方法查询数据，移除对 JdbcTemplate 的依赖
+     */
+    private static List<Map<String, Object>> getSqlResult(String sql, Object... params) {
+        String formattedSql = sql;
+        for (Object param : params) {
+            if (param instanceof String) {
+                formattedSql = formattedSql.replaceFirst("\\?", "'" + param + "'");
+            } else {
+                formattedSql = formattedSql.replaceFirst("\\?", String.valueOf(param));
+            }
+        }
+        cn.northpark.np5.service.SoftService softService = SpringContextUtils.getBean(cn.northpark.np5.service.SoftService.class);
+        return softService.querySqlMap(formattedSql);
     }
 }
